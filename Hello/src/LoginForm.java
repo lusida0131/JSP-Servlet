@@ -1,0 +1,69 @@
+
+
+import java.io.IOException;
+import java.io.PrintWriter;
+
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+/**
+ * Servlet implementation class LoginForm
+ */
+@WebServlet("/LoginForm")
+public class LoginForm extends HttpServlet {
+	private static final long serialVersionUID = 1L;
+       
+    /**
+     * @see HttpServlet#HttpServlet()
+     */
+    public LoginForm() {
+        super();
+        // TODO Auto-generated constructor stub
+    }
+
+	/**
+	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
+	 */
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		// TODO Auto-generated method stub
+		response.getWriter().append("Served at: ").append(request.getContextPath());
+	}
+
+	/**
+	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
+	 */
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		request.setCharacterEncoding("UTF-8");
+		response.setContentType("text/html; charset=UTF-8");
+		String id = request.getParameter("id");
+		String pwd = request.getParameter("pwd");
+		String name = request.getParameter("name");
+		String gender = request.getParameter("gender");
+		PrintWriter out = response.getWriter();
+		out.println("<html><head><title>회원정보 출력</title></head>");
+		out.println("<body>");
+		out.println("<h2>회원 정보</h2>");
+		out.println("아이디 : " + id + "<br>");
+		out.println("암 &nbsp; 호: " + pwd + "<br>");
+		out.println("이 &nbsp; 름: " + name + "<br>");
+		out.println("성 &nbsp; 별: " + gender + "<br>");
+		
+		String items[] = request.getParameterValues("item");
+		if(items == null) {
+			out.print("선택된 항목이 없습니다.");
+			
+		} else {
+			out.println("관심사 : ");
+			for(String item : items) {
+				out.print(item + " ");
+			}
+		}
+		out.println("</body");
+		out.println("</html");
+		out.close();
+	}
+
+}
