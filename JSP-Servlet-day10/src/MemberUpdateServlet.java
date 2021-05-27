@@ -8,6 +8,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import dao.MemberDAO;
 import dto.MemberVO;
@@ -31,10 +32,16 @@ public class MemberUpdateServlet extends HttpServlet {
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		String useid = request.getParameter("useid");
-		MemberDAO mDao = MemberDAO.getInstance();
-		MemberVO mVo = mDao.getMember(useid);
-		request.setAttribute("mVo", mVo);
+		String url = "chap09/memberUpdateForm.jsp";
+		HttpSession session	= request.getSession();
+		if(session.getAttribute("loginUser") != null) {
+			String useid = request.getParameter("useid");
+			MemberDAO mDao = MemberDAO.getInstance();
+			MemberVO mVo = mDao.getMember(useid);
+		}else {
+			url = "/chap09/loginForm.jsp";
+			request.setAttribute("message", "로그인을 먼저 하세요");
+		}
 		RequestDispatcher dispatcher = request.getRequestDispatcher("chap09/memberUpdateForm.jsp");
 		dispatcher.forward(request, response);
 	}
@@ -48,15 +55,26 @@ public class MemberUpdateServlet extends HttpServlet {
 		String email = request.getParameter("email");
 		String phone = request.getParameter("phone");
 		String grade = request.getParameter("grade");
-		MemberVO mVo = new MemberVO();
-		mVo.setUseid(useid);
-		mVo.setPwd(pwd);
-		mVo.setEmail(email);
-		mVo.setPhone(phone);
-		mVo.setGrade(Integer.parseInt(grade));
-		MemberDAO mDao = MemberDAO.getInstance();
-		mDao.updateMember(mVo);
-		response.sendRedirect("login.do");
+		
+		String url = "chap09/loginForm.jsp";
+		HttpSession session = request.getSession();
+		String sessionUseid = (String) session.getAttribute("loginUser");
+		if(sessionUseid == null) {
+			url = "/chap09/loginForm.jsp";
+			request.setAttribute("message", "로그인을 먼저 하세요");
+		} else {
+			if(sessionUseid.equals(useid)) {
+				MemberVO mVo = new MemberVO();
+				mVo.setUseid(useid);
+				mVo.setPwd(pwd);
+				mVo.setEmail(email);
+				mVo.setPhone(phone);
+				mVo.setGrade(Integer.parseInt(grade));
+				MemberDAO mDao = MemberDAO.getInstance();
+				mDao.updateMember(mVo);
+				response.sendRedirect("login.do");
+			}
+		}
 	}
 
 }
