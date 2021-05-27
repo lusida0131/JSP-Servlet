@@ -34,13 +34,20 @@ public class MemberUpdateServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String url = "chap09/memberUpdateForm.jsp";
 		HttpSession session	= request.getSession();
-		if(session.getAttribute("loginUser") != null) {
+		MemberVO member = (MemberVO) session.getAttribute("loginUser");
+		if(member == null) {
+			url = "chap09/loginForm.jsp";
+			request.setAttribute("message", "로그인 먼저 하세요");
+		} else {
 			String useid = request.getParameter("useid");
-			MemberDAO mDao = MemberDAO.getInstance();
-			MemberVO mVo = mDao.getMember(useid);
-		}else {
-			url = "/chap09/loginForm.jsp";
-			request.setAttribute("message", "로그인을 먼저 하세요");
+			if (member.getUseid().equals(useid)){
+				MemberDAO mDao = MemberDAO.getInstance();
+				MemberVO mVo = mDao.getMember(useid);
+				request.setAttribute("mVo", mVo);
+			} else {
+				url = "chap09/loginForm.jsp";
+				request.setAttribute("message", "잘못된 요청입니다.");
+			}
 		}
 		RequestDispatcher dispatcher = request.getRequestDispatcher("chap09/memberUpdateForm.jsp");
 		dispatcher.forward(request, response);
@@ -58,12 +65,12 @@ public class MemberUpdateServlet extends HttpServlet {
 		
 		String url = "chap09/loginForm.jsp";
 		HttpSession session = request.getSession();
-		String sessionUseid = (String) session.getAttribute("loginUser");
-		if(sessionUseid == null) {
+		MemberVO member = (MemberVO) session.getAttribute("loginUser");
+		if(member == null) {
 			url = "/chap09/loginForm.jsp";
 			request.setAttribute("message", "로그인을 먼저 하세요");
 		} else {
-			if(sessionUseid.equals(useid)) {
+			if(member.getUseid().equals(useid)) {
 				MemberVO mVo = new MemberVO();
 				mVo.setUseid(useid);
 				mVo.setPwd(pwd);
