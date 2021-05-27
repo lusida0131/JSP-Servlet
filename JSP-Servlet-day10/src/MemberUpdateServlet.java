@@ -15,7 +15,7 @@ import dto.MemberVO;
 /**
  * Servlet implementation class MemberUpdateServlet
  */
-@WebServlet("/MemberUpdate.do")
+@WebServlet("/memberUpdate.do")
 public class MemberUpdateServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        

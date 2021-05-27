@@ -20,8 +20,8 @@
 				</td>
 			</tr>
 			<tr>
-				<td colspan="2" akign="center"><input type="submit" value="로그아웃"
-				>&nbsp;&nbsp;<input type="button" value="회원정보 변경" onclick="location.href='memberUpdate.do>useid=${loginUser.useid}'">
+				<td colspan="2" align="center"><input type="submit" value="로그아웃"
+				>&nbsp;&nbsp;<input type="button" value="회원정보 변경" onclick="location.href='memberUpdate.do?useid=${loginUser.useid}'">
 				</td>
 			</tr>
 		</table>
