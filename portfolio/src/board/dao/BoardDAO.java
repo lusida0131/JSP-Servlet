@@ -7,7 +7,6 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
-import board.vo.Paging;
 import board.dto.BoardVO;
 import util.DBManager;
 
@@ -22,36 +21,33 @@ public class BoardDAO {
 	public int getAllCount() throws SQLException {
 		String sql = "select count(*) as count from board";
 		int count = 0;
-		Connection conn = DBManager.getConnection();
-		Statement stmt = conn.createStatement();
-		ResultSet rs = stmt.executeQuery(sql);
-		try	{
+		
+		try	(Connection conn = DBManager.getConnection();
+				Statement stmt = conn.createStatement();
+				ResultSet rs = stmt.executeQuery(sql);){
 			if(rs.next()) {
 				count = rs.getInt("count");
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
-		}
+		} 
 		return count;
 	}
 
 	public List<BoardVO> selectAllBoards(int page) {
 		 int startNum = (page-1)*10;
-	     int endNum = page*10;
 		
 //	String sql = "select * from board order by num desc";
-		String sql = "select board.* FROM(\r\n" + 
-                "   SELECT * FROM board \r\n" + 
-                "        order by num desc\r\n" + 
-                ") board\r\n" + 
-                "LIMIT ?, ? ";
+		String sql = "select * FROM board " + 
+                " order by num desc " + 
+                " LIMIT ?, ? ";
+		ResultSet rs = null;
 		List<BoardVO> list = new ArrayList<BoardVO>();
-		try  {
-				Connection conn = DBManager.getConnection();
-				PreparedStatement pstmt = conn.prepareStatement(sql);
+		try (Connection conn = DBManager.getConnection();
+				PreparedStatement pstmt = conn.prepareStatement(sql);) {			
 				pstmt.setInt(1, startNum);
 				pstmt.setInt(2, 10);
-				ResultSet rs = pstmt.executeQuery();	
+				rs = pstmt.executeQuery();	
 				
 			while (rs.next()) {
 				
@@ -68,6 +64,8 @@ public class BoardDAO {
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
+		} finally {
+			DBManager.close(rs);
 		}
 		return list;
 	}
@@ -85,7 +83,7 @@ public class BoardDAO {
 			pstmt.setString(5, bVo.getContent());
 			pstmt.executeUpdate();
 		} catch (SQLException e) {
-			e.printStackTrace();
+			e.printStackTrace();	
 		}
 	}
 

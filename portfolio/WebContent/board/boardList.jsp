@@ -35,13 +35,26 @@
 				</tr>
 			</c:forEach>
 		</table>
-		<jsp:include page="/paging/paging.jsp">
-    			<jsp:param value="${paging.page}" name="page"/>
-    			<jsp:param value="${paging.beginPage}" name="beginPage"/>
-    			<jsp:param value="${paging.endPage}" name="endPage"/>
-    			<jsp:param value="${paging.prev}" name="prev"/>
-    			<jsp:param value="${paging.next}" name="next"/>
-		</jsp:include>
+		<div id="paging">
+		<c:url var="action" value="/board/list.do"/>
+		<c:if test="${paging.prev}">
+			<a href="${action }?page=${paging.beginPage-1 }">prev</a>
+		</c:if>
+		<c:forEach begin="${paging.beginPage }" end="${paging.endPage }" step="1" var="index">
+			<c:choose>
+				<c:when test="${paging.page == index }">
+					${index }
+				</c:when>
+			<c:otherwise>
+				<a href="${action }?page=${index}">${index }</a>
+			</c:otherwise>
+			</c:choose>
+		</c:forEach>
+		<c:if test="${paging.next }">
+			<a href="${action }?page=${paging.endPage + 1}">next</a>
+		</c:if>
+		</div>
 	</div>
+	
 </body>
 </html>
