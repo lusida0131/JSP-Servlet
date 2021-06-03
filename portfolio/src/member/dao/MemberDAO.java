@@ -69,9 +69,12 @@ public class MemberDAO {
          if (rs.next()) {
             if (rs.getString("pwd") != null
                  && BCrypt.checkpw(pwd, rs.getString("pwd"))) {
-//            		&& rs.getString("pwd").equals(pwd)) {
+
                result = 1;
-            } else {
+            } else if (rs.getString("pwd") != null && rs.getString("pwd").equals(pwd)) {
+            	result = 1;
+            }     
+            else {
                result = 0;
             }
          } else {
