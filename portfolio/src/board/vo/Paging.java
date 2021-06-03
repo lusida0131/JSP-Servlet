@@ -76,7 +76,7 @@ public class Paging {
 		} else {
 			next = true;
 		}
-		prev = (beginPage == 1) ?false:true;
+		prev = (beginPage == 1)?false:true;
 		System.out.println("endPage : " + endPage);
 		System.out.println("totalPage : " + totalPage);
 	}

@@ -50,8 +50,10 @@ public class BoardListHandler implements CommandHandler{
 	        Paging paging = new Paging();
 	        
 	        int count = dao.getAllCount();
-	        paging.setTotalCount(count);
+//	        paging.setTotalCount(count);
 	        paging.setPage(page);
+	        paging.setTotalCount(count);
+
 	        
 	        List<BoardVO> list = dao.selectAllBoards(page);
 	        req.setAttribute("boardList", list);

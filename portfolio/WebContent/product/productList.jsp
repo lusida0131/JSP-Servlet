@@ -6,7 +6,7 @@
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>상품 목록</title>
-<link rel="stylesheet" type="text/css" href="<%=request.getContextPath() %>/css/shopping.css">
+<link rel="stylesheet" type="text/css" href="../css/shopping.css">
 </head>
 <body>
 	<div id="wrap" align="center">
